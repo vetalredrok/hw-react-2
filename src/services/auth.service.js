@@ -2,8 +2,8 @@ import {axiosService} from "./axios.service";
 import {urls} from "../configs";
 
 
-const accessTokenKey = 'access'
-const refreshTokenKey = 'refresh'
+const accessTokenKey = 'access';
+const refreshTokenKey = 'refresh';
 
 const authService = {
     register:(user) => axiosService.post(urls.users, user),

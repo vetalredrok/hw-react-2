@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useForm} from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 
 import {userActions} from "../../redux";
 
@@ -8,13 +9,22 @@ const LoginPage = () => {
 
     const {handleSubmit, register} = useForm();
     const dispatch = useDispatch();
-    const {loading, error} = useSelector(state => state.userReducer);
+    const {loading, error, userInfo} = useSelector(state => state.userReducer);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(userInfo){
+            navigate('/cars')
+            console.log(userInfo);
+        }
+    }, [userInfo])
 
 
 
     const submitForm = (data) =>{
         console.log(data);
         dispatch(userActions.loginUser(data));
+
     }
 
     return (

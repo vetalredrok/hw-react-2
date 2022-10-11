@@ -2,14 +2,19 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
 import {authService} from "../../../services";
 
-const userToken = authService.getAccessToken() ? authService.getAccessToken():null
+const userToken = authService.getAccessToken()
+    ? authService.getAccessToken()
+    : null
 
-const userTokenRefresh = authService.getRefreshToken() ? authService.getRefreshToken():null
+const userTokenRefresh = authService.getRefreshToken()
+    ? authService.getRefreshToken()
+    : null
+
 
 const initialState = {
-    userInfo: {},
-    userToken,
-    userTokenRefresh,
+    userInfo: null,
+    userToken: userToken,
+    userTokenRefresh: userTokenRefresh,
     loading: false,
     error: null,
     success: false
@@ -34,7 +39,8 @@ const loginUser = createAsyncThunk(
     async ({username, password}, {rejectWithValue}) => {
         try {
            const {data} = await authService.login({username, password});
-           authService.setToken(data);
+           await authService.setToken(data);
+           console.log(data);
            return data;
         } catch (e) {
             return rejectWithValue(e.response.data);
@@ -53,7 +59,7 @@ const userSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(registerUser.fulfilled, (state, action) => {
+            .addCase(registerUser.fulfilled, (state) => {
                 state.loading = false;
                 state.success = true;
             })
@@ -72,6 +78,8 @@ const userSlice = createSlice({
                 state.userInfo = action.payload;
                 state.userToken = action.payload.access;
                 state.userTokenRefresh = action.payload.refresh;
+                console.log(state.userToken);
+                console.log(state.userTokenRefresh);
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false

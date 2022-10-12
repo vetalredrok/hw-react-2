@@ -5,16 +5,11 @@ import {Car} from "../Car/Car";
 import {carActions} from "../../redux";
 
 
-const Cars = () => {
+const Cars = ({cars}) => {
 
-    const dispatch = useDispatch();
     const selector = useSelector(state => state.carReducer);
-    const {cars, loading, error} = selector;
+    const {loading, error} = selector;
 
-    useEffect(() => {
-        dispatch(carActions.getCars());
-        console.log(cars);
-    }, [cars])
     return (
         <div>
             {

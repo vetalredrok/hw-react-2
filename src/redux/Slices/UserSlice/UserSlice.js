@@ -2,19 +2,10 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
 import {authService} from "../../../services";
 
-const userToken = authService.getAccessToken()
-    ? authService.getAccessToken()
-    : null
-
-const userTokenRefresh = authService.getRefreshToken()
-    ? authService.getRefreshToken()
-    : null
-
-
 const initialState = {
     userInfo: null,
-    userToken: userToken,
-    userTokenRefresh: userTokenRefresh,
+    userToken: null,
+    userTokenRefresh: null,
     loading: false,
     error: null,
     success: false

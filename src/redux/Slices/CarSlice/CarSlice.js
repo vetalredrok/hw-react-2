@@ -2,19 +2,15 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
 import {carService} from "../../../services";
 
-
 const getCars = createAsyncThunk(
     'cars/getCars',
-    async (arg, {getState, rejectWithValue}) => {
+    async (_, {rejectWithValue}) => {
         try {
-
-            const {user} = getState()
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${user.userToken}`
-                }
-            };
-            const {data} = carService.getAll(config)
+            const response = await carService.getAll()
+            console.log(response);
+            const data = response.data;
+            console.log(data);
+            return data;
 
         } catch (e) {
             return rejectWithValue(e.response.data);
@@ -25,7 +21,9 @@ const getCars = createAsyncThunk(
     )
 
 const initialState = {
-
+    cars: [],
+    loading: false,
+    error: null
 }
 
 const carSlice = createSlice({
@@ -34,6 +32,25 @@ const carSlice = createSlice({
     reducers: {},
     extraReducers: builder => {
         builder
-            .addCase()
+            .addCase(getCars.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getCars.fulfilled, (state, action)=>{
+                state.cars = action.payload;
+                console.log(state.cars)
+                state.loading = false;
+            })
+            .addCase(getCars.rejected, (state, action) => {
+                state.error = action.payload;
+                state.loading = false;
+            })
     }
-    })
+    });
+
+const {reducer: carReducer} = carSlice;
+
+const carActions = {
+    getCars
+}
+
+export {carReducer, carActions}

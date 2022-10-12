@@ -2,10 +2,10 @@ import React from 'react';
 
 import {Cars} from "../../components";
 
+
+
 const CarsPage = () => {
-    return (
-            <Cars/>
-    );
-};
+    return <Cars/>
+}
 
 export {CarsPage};
